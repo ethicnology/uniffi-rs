@@ -212,7 +212,8 @@ impl ExportItem {
 
     fn from_struct(item: syn::ItemStruct, attr_args: TokenStream) -> syn::Result<Self> {
         let args: ExportStructArgs = syn::parse(attr_args)?;
-        let uniffi_traits: Vec<UniffiTraitDiscriminants> = args.traits.into_iter().collect();
+        let mut uniffi_traits: Vec<UniffiTraitDiscriminants> = args.traits.into_iter().collect();
+        uniffi_traits.sort();
         if uniffi_traits.is_empty() {
             Err(syn::Error::new(Span::call_site(),
                 "uniffi::export on a struct must supply a builtin trait name. Did you mean `#[derive(uniffi::Object)]`?"
@@ -227,7 +228,8 @@ impl ExportItem {
 
     fn from_enum(item: syn::ItemEnum, attr_args: TokenStream) -> syn::Result<Self> {
         let args: ExportStructArgs = syn::parse(attr_args)?;
-        let uniffi_traits: Vec<UniffiTraitDiscriminants> = args.traits.into_iter().collect();
+        let mut uniffi_traits: Vec<UniffiTraitDiscriminants> = args.traits.into_iter().collect();
+        uniffi_traits.sort();
         if uniffi_traits.is_empty() {
             Err(syn::Error::new(Span::call_site(),
                 "uniffi::export on an enum must supply a builtin trait name. Did you mean `#[derive(uniffi::Enum)]`?"
